@@ -14,6 +14,7 @@ export const handler = middy(
     console.log('Caller event', event)
     const userId = getUserId(event)
     const result = await getTodosForUser(userId)
+    const items = {'items':result.Items}
 
     if (result.Count !== 0) {
       return {
@@ -22,7 +23,7 @@ export const handler = middy(
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
-        body: JSON.stringify(result.Items)
+        body: JSON.stringify(items)
       }
     }
     else{
@@ -32,7 +33,7 @@ export const handler = middy(
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
-        body:''
+        body:'No new todos'
       }
     }
 

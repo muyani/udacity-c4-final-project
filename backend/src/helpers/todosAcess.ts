@@ -50,7 +50,7 @@ export class TodosAccess {
         const result = await docClient.update({
             TableName: tableName,
             Key: key,
-            UpdateExpression: 'set name=:name,dueDate=:dueDate,done=:done',
+            UpdateExpression: 'set named=:name,dueDate=:dueDate,done=:done',
             ExpressionAttributeValues: {
                 ':name': item.name,
                 ':dueDate': item.dueDate,

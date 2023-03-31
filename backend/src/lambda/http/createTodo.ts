@@ -12,6 +12,7 @@ export const handler = middy(
     // FANYA: Implement creating a new TODO item
     const userId = getUserId(event);
     const result = await createTodo(userId, newTodo);
+    const newTodoAfter = {'item':result.Attributes}
     if (result) {
       return {
         statusCode: 201,
@@ -20,12 +21,12 @@ export const handler = middy(
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-          newTodo
+          newTodoAfter
         })
       }
     }
     return {
-      statusCode: 404,
+      statusCode: 400,
       headers: {
         
           'Access-Control-Allow-Origin': '*',

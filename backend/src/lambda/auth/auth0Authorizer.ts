@@ -59,26 +59,28 @@ export const handler = middy(
 )
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader);
-  const jwt: Jwt = decode(token, { complete: true }) as Jwt
-  let cert = ''
+  const jwt: Jwt = decode(token, { complete: true }) as Jwt;
+  if (jwt.header.alg !== 'RS256'){
+        throw new Error('JWT is not RSA')
+  }
   const options = {
     method:'GET',
     url:jwksUrl
-
   }
-  const response = await Axios.request(options)
-  const keys = response.data.keys;
-  keys.forEach(element => {
-    if (element.kid === jwt.header.kid){
-     cert = element.x5c[0]
-    }
-  });
-  return verify(token, cert, { algorithms: ['RS256'] }) as JwtPayload
 
+  const response = await Axios.request(options);
+  const keys = response.data.keys;
+  const signingKeys = keys.filter(el => el.kid === jwt.header.kid)
+  logger.info("This is the signkeys filtered generated"+ signingKeys)
+  const cert = '-----BEGIN CERTIFICATE-----'+'\n'+ signingKeys[0].x5c[0]+'\n'+'-----END CERTIFICATE-----'
+  logger.info("Built certificate"+ cert)   
+  const results = verify(token,cert , { algorithms: ['RS256'] }) as JwtPayload
+  return results;
+};
   // TODO: Implement token verification
   // You should implement it similarly to how it was implemented for the exercise for the lesson 5
   // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
-}
+
 
 function getToken(authHeader: string): string {
   if (!authHeader) throw new Error('No authentication header')
