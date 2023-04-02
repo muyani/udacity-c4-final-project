@@ -90,6 +90,7 @@ function getToken(authHeader: string): string {
 
   const split = authHeader.split(' ')
   const token = split[1]
+  logger.info("working with this token", token)
   return token
 }
 
