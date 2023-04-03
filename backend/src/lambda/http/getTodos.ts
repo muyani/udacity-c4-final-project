@@ -20,7 +20,7 @@ export const handler = middy(
     const result = await getTodosForUser(userId)
     const items = {'items':result.Items}
 
-    if (result.Count !== 0) {
+    if (result) {
       logger.info("feched some todos " + JSON.stringify(result.Items))
       return {
         statusCode: 200,
