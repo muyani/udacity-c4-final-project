@@ -22,7 +22,7 @@ export const createTodo = async (userId: string, item: CreateTodoRequest) => {
         userId: userId,
         done: false,
         ...item,
-        attachmentUrl: createAttachmentPresignedUrl(userId, todoId)
+        attachmentUrl: `https://${s3_bucket}.s3.amazonaws.com/${todoId}`
     }
     const result = await todoaccess.putItem(TODOS_TABLE, newTodoItem);
     if (result) {
@@ -51,8 +51,8 @@ export const getTodosForUser = async (userId: string) => {
 }
 
 
-export const createAttachmentPresignedUrl = (userId: string, todoId: string) => {
-    const key = { userId: userId, todoId: todoId }
+export const createAttachmentPresignedUrl = (todoId: string) => {
+    const key = todoId
     const uploadUrl = attach.getUploadUrl(key, s3_bucket, signed_expiry);
     return uploadUrl;
 }

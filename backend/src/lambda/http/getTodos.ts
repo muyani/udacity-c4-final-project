@@ -21,7 +21,7 @@ export const handler = middy(
     const items = {'items':result.Items}
 
     if (result.Count !== 0) {
-      logger.info("feched some todos " + result.Items)
+      logger.info("feched some todos " + JSON.stringify(result.Items))
       return {
         statusCode: 200,
         headers: {

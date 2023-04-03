@@ -16,7 +16,7 @@ export class AttachmentUtils {
             return s3.getSignedUrl('putObject', { // The URL will allow to perform the PUT operation
                 Bucket: bucket_name, // Name of an S3 bucket
                 Key: id, // id of an object this URL allows access to
-                expiresIn: expires  // A URL is only valid for 5 minutes
+                Expires: expires  // A URL is only valid for 5 minutes
             })
         }
         catch (e) {
